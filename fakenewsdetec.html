@@ -228,3 +228,151 @@
         }
     </style>
 </head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Fake News Detector</h1>
+            <div class="subtitle">Advanced AI-powered news verification tool</div>
+        </div>
+        
+        <div class="input-section">
+            <div class="input-options">
+                <div class="option-btn active" onclick="setInputType('text')">
+                    <i class="fas fa-file-alt"></i> Text
+                </div>
+                <div class="option-btn" onclick="setInputType('url')">
+                    <i class="fas fa-link"></i> URL
+                </div>
+            </div>
+
+            <textarea id="newsInput" placeholder="Paste your news article here..."></textarea>
+            
+            <div class="action-buttons">
+                <button onclick="analyzeNews()">
+                    <i class="fas fa-search"></i> Analyze
+                </button>
+                <button class="secondary" onclick="clearInput()">
+                    <i class="fas fa-undo"></i> Clear
+                </button>
+            </div>
+        </div>
+
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Analyzing content...</p>
+        </div>
+
+        <div class="result-section">
+            <div class="result-box">
+                <div class="prediction">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Analysis Result</span>
+                </div>
+                
+                <div class="confidence-section">
+                    <div class="confidence-bar">
+                        <div class="confidence-level"></div>
+                    </div>
+                    <div>Confidence Level: <span id="confidence">0</span>%</div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-label">Processing Time</div>
+                        <div class="stat-value" id="processingTime">0.0s</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Content Length</div>
+                        <div class="stat-value" id="contentLength">0 chars</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Powered by ByteRush • Updated 2025
+        </div>
+    </div>
+
+    <script>
+        let currentInputType = 'text';
+
+        function setInputType(type) {
+            currentInputType = type;
+            const textarea = document.getElementById('newsInput');
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            switch(type) {
+                case 'text':
+                    textarea.placeholder = 'Paste your news article here...';
+                    break;
+                case 'url':
+                    textarea.placeholder = 'Enter the URL of the news article...';
+                    break;
+            }
+        }
+
+        function clearInput() {
+            document.getElementById('newsInput').value = '';
+            document.querySelector('.result-section').style.display = 'none';
+        }
+
+        async function analyzeNews() {
+            const text = document.getElementById('newsInput').value;
+            if(text.length < 5) {
+                alert("Please enter more content for analysis");
+                return;
+            }
+
+            const startTime = performance.now();
+
+            try {
+                document.querySelector('.loading').style.display = 'block';
+                document.querySelector('.result-section').style.display = 'none';
+
+              
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                const endTime = performance.now();
+                const processingTime = ((endTime - startTime) / 1000).toFixed(1);
+
+                document.querySelector('.loading').style.display = 'none';
+                document.querySelector('.result-section').style.display = 'block';
+
+                // Update stats
+                document.getElementById('processingTime').textContent = `${processingTime}s`;
+                document.getElementById('contentLength').textContent = `${text.length} chars`;
+
+                // For demo, you would replace this with actual API response handling
+                updateResults({
+                    prediction: 'Analysis Complete',
+                    type: 'real',
+                    confidence: 85
+                });
+
+            } catch (error) {
+                document.querySelector('.loading').style.display = 'none';
+                alert('An error occurred during analysis. Please try again.');
+                console.error('Analysis error:', error);
+            }
+        }
+
+        function updateResults(result) {
+            const prediction = document.querySelector('.prediction');
+            const confidenceLevel = document.querySelector('.confidence-level');
+            const confidenceText = document.querySelector('#confidence');
+
+            prediction.innerHTML = `
+                <i class="fas fa-${result.type === 'real' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>Result: ${result.prediction}</span>
+            `;
+            prediction.className = `prediction ${result.type}`;
+            confidenceLevel.style.width = `${result.confidence}%`;
+            confidenceText.textContent = result.confidence;
+        }
+    </script>
+</body>
+</html>
