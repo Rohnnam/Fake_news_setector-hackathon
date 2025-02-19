@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: White;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #F5F1ED;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: Black;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            display: block;
+            width: 200px;
+            margin: 0 auto;
+            padding: 10px;
+            background-color: #2D5D7B;
+            color: White;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #93E1D8;
+        }
+
+        .result-section {
+            background-color: #DAD2BC;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            background-color: #DAD2BC;
+        }
+
+        .prediction {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .fake {
+            color: #e74c3c;
+        }
+
+        .real {
+            color: #27ae60;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .confidence-level {
+            width: 70%;
+            height: 100%;
+            background-color: #3498db;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fake News Detector</h1>
+        
+        <div class="input-section">
+            <textarea placeholder="Paste your news article here..."></textarea>
+            <button onclick="checkNews()">Analyze News</button>
+        </div>
+
+        <div class="result-section">
+            <div class="result-box">
+                <div class="prediction">Analysis Result</div>
+                <div class="confidence-bar">
+                    <div class="confidence-level"></div>
+                </div>
+                <div>Confidence Level: <span id="confidence">70</span>%</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkNews() {
+            // This is a simple demo function
+            // In a real application, this would connect to a backend
+            const text = document.querySelector('textarea').value;
+            if(text.length < 50) {
+                alert("Please enter a longer text for analysis");
+                return;
+            }
+
+            const prediction = document.querySelector('.prediction');
+            const confidenceLevel = document.querySelector('.confidence-level');
+            const confidenceText = document.querySelector('#confidence');
+
+            // Demo result - randomly choosing result
+            if(Math.random() > 0.5) {
+                prediction.textContent = "Result: Likely Real News";
+                prediction.className = 'prediction real';
+                confidenceLevel.style.width = "85%";
+                confidenceLevel.style.backgroundColor = "#27ae60";
+                confidenceText.textContent = "85";
+            } else {
+                prediction.textContent = "Result: Potentially Fake News";
+                prediction.className = 'prediction fake';
+                confidenceLevel.style.width = "75%";
+                confidenceLevel.style.backgroundColor = "#e74c3c";
+                confidenceText.textContent = "75";
+            }
+        }
+    </script>
+</body>
+</html>
